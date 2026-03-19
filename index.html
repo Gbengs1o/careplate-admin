@@ -1,0 +1,1994 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CarePlate Admin Dashboard Prototype</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f4f1ea;
+            --bg-2: #ebe6dc;
+            --surface: rgba(255, 255, 255, 0.72);
+            --surface-strong: rgba(255, 255, 255, 0.9);
+            --surface-dark: #17342f;
+            --surface-dark-2: #20463f;
+            --text: #16312c;
+            --muted: #6f7b77;
+            --line: rgba(18, 44, 39, 0.08);
+            --primary: #1b3c35;
+            --primary-2: #28584e;
+            --accent: #d8b75c;
+            --accent-2: #f28b57;
+            --success: #2e9a66;
+            --danger: #ff6a5b;
+            --info: #5a8dee;
+            --success-soft: rgba(46, 154, 102, 0.12);
+            --danger-soft: rgba(255, 106, 91, 0.12);
+            --info-soft: rgba(90, 141, 238, 0.12);
+            --accent-soft: rgba(216, 183, 92, 0.16);
+            --purple: #7c6cf2;
+            --purple-soft: rgba(124, 108, 242, 0.12);
+            --shadow-xl: 0 40px 100px rgba(13, 33, 28, 0.12);
+            --shadow-lg: 0 18px 40px rgba(16, 41, 36, 0.10);
+            --shadow-md: 0 12px 30px rgba(16, 41, 36, 0.08);
+            --radius-xxl: 34px;
+            --radius-xl: 28px;
+            --radius-lg: 22px;
+            --radius-md: 18px;
+            --radius-sm: 14px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        *::selection {
+            background: rgba(216, 183, 92, 0.22);
+        }
+
+        html,
+        body {
+            min-height: 100%;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.9), transparent 28%),
+                radial-gradient(circle at 85% 10%, rgba(216, 183, 92, 0.16), transparent 22%),
+                radial-gradient(circle at 80% 80%, rgba(40, 88, 78, 0.12), transparent 24%),
+                linear-gradient(160deg, #f7f3ec 0%, #eee8dc 52%, #e7e0d2 100%);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .shell {
+            display: grid;
+            grid-template-columns: 290px 1fr;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: linear-gradient(180deg, #17342f 0%, #102621 100%);
+            color: #fff;
+            padding: 28px 20px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+            border-right: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: 0 20px 40px rgba(16, 41, 36, 0.18);
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.18);
+            border-radius: 999px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 10px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+        }
+
+        .brand-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 18px;
+            display: grid;
+            place-items: center;
+            font-size: 24px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            color: white;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.16);
+            flex-shrink: 0;
+        }
+
+        .brand h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 21px;
+            line-height: 1;
+            letter-spacing: -0.04em;
+        }
+
+        .brand p {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.72);
+            margin-top: 4px;
+        }
+
+        .nav-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .nav-title {
+            color: rgba(255, 255, 255, 0.46);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.4px;
+            font-weight: 800;
+            padding: 0 12px;
+            margin-top: 4px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 14px;
+            border-radius: 18px;
+            color: rgba(255, 255, 255, 0.86);
+            cursor: pointer;
+            transition: 0.22s ease;
+            border: 1px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.06);
+            transform: translateX(2px);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, var(--primary-2), var(--primary));
+            border-color: rgba(255, 255, 255, 0.10);
+            color: #fff;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.16);
+        }
+
+        .nav-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.08);
+            display: grid;
+            place-items: center;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+
+        .nav-item.active .nav-icon {
+            background: rgba(255, 255, 255, 0.14);
+        }
+
+        .nav-item span:last-child {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .side-card {
+            margin-top: auto;
+            padding: 18px;
+            border-radius: 24px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.05));
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        }
+
+        .side-card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 17px;
+            margin-bottom: 8px;
+        }
+
+        .side-card p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.74);
+            line-height: 1.55;
+            margin-bottom: 14px;
+        }
+
+        .side-btn {
+            width: 100%;
+            border: none;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            color: white;
+            font-weight: 800;
+            padding: 13px 14px;
+            border-radius: 16px;
+            cursor: pointer;
+            box-shadow: 0 14px 24px rgba(242, 139, 87, 0.18);
+        }
+
+        .main {
+            padding: 26px;
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .page {
+            display: none;
+            animation: fadeUp .28s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+            margin-bottom: 22px;
+        }
+
+        .headline h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 34px;
+            line-height: 0.95;
+            letter-spacing: -0.05em;
+            margin-bottom: 8px;
+        }
+
+        .headline p {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.6;
+            max-width: 780px;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid var(--line);
+            padding: 13px 14px;
+            min-width: 260px;
+            border-radius: 18px;
+            box-shadow: var(--shadow-md);
+            backdrop-filter: blur(16px);
+        }
+
+        .search input {
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 14px;
+            background: transparent;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .action-btn {
+            border: none;
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.2s ease;
+            font-family: inherit;
+        }
+
+        .action-btn.primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-2));
+            color: #fff;
+            box-shadow: 0 18px 28px rgba(27, 60, 53, 0.20);
+        }
+
+        .action-btn.secondary {
+            background: rgba(255, 255, 255, 0.82);
+            color: var(--text);
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow-md);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .hero {
+            background:
+                linear-gradient(180deg, rgba(13, 26, 24, 0.04), rgba(13, 26, 24, 0.12)),
+                linear-gradient(160deg, #20463f 0%, #17342f 68%, #102621 100%);
+            color: #fff;
+            border-radius: 32px;
+            padding: 26px;
+            box-shadow: 0 26px 50px rgba(23, 52, 47, 0.30);
+            display: grid;
+            grid-template-columns: 1.35fr 0.85fr;
+            gap: 22px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 90% 15%, rgba(216, 183, 92, 0.26), transparent 18%),
+                radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.10), transparent 18%);
+            pointer-events: none;
+        }
+
+        .hero h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 30px;
+            line-height: 0.97;
+            margin-bottom: 12px;
+            letter-spacing: -0.05em;
+            max-width: 560px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero p {
+            font-size: 14px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.82);
+            max-width: 620px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 18px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-tag {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #fff;
+            padding: 10px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800;
+            backdrop-filter: blur(8px);
+        }
+
+        .hero-panel {
+            align-self: stretch;
+            background: rgba(255, 255, 255, 0.10);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 24px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            backdrop-filter: blur(12px);
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-panel h4 {
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.62);
+            margin-bottom: 2px;
+        }
+
+        .hero-score {
+            font-family: 'Outfit', sans-serif;
+            font-size: 46px;
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -0.05em;
+        }
+
+        .mini-stat {
+            background: rgba(255, 255, 255, 0.10);
+            border-radius: 18px;
+            padding: 13px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mini-stat span {
+            display: block;
+        }
+
+        .mini-stat .label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .mini-stat .value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            margin-top: 4px;
+            letter-spacing: -0.03em;
+        }
+
+        .grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .stats-grid {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.68));
+            border: 1px solid rgba(22, 49, 44, 0.06);
+            border-radius: 28px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            backdrop-filter: blur(18px);
+        }
+
+        .stat-card {
+            padding: 20px;
+            position: relative;
+            min-height: 152px;
+        }
+
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .stat-title {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: rgba(22, 49, 44, 0.48);
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            line-height: .95;
+        }
+
+        .pill-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 18px;
+            display: grid;
+            place-items: center;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .soft-blue {
+            background: var(--info-soft);
+            color: var(--info);
+        }
+
+        .soft-green {
+            background: var(--success-soft);
+            color: var(--success);
+        }
+
+        .soft-orange {
+            background: rgba(242, 139, 87, 0.14);
+            color: var(--accent-2);
+        }
+
+        .soft-purple {
+            background: var(--purple-soft);
+            color: var(--purple);
+        }
+
+        .soft-red {
+            background: var(--danger-soft);
+            color: var(--danger);
+        }
+
+        .stat-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .trend {
+            font-size: 11px;
+            font-weight: 800;
+            padding: 8px 10px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .trend.up {
+            background: var(--success-soft);
+            color: var(--success);
+        }
+
+        .trend.warn {
+            background: var(--accent-soft);
+            color: #8d6916;
+        }
+
+        .trend.down {
+            background: var(--danger-soft);
+            color: var(--danger);
+        }
+
+        .spark {
+            height: 38px;
+            display: flex;
+            align-items: flex-end;
+            gap: 5px;
+        }
+
+        .spark span {
+            display: block;
+            width: 7px;
+            border-radius: 999px 999px 4px 4px;
+            background: linear-gradient(180deg, rgba(27, 60, 53, 0.25), rgba(27, 60, 53, 0.85));
+        }
+
+        .layout-2 {
+            grid-template-columns: 1.2fr 0.8fr;
+            align-items: start;
+            margin-bottom: 20px;
+        }
+
+        .section {
+            padding: 22px;
+        }
+
+        .section-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .section-head h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 22px;
+            letter-spacing: -0.04em;
+            margin-bottom: 6px;
+        }
+
+        .section-head p {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.6;
+            max-width: 620px;
+        }
+
+        .chip-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .chip {
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.75);
+            border: 1px solid rgba(22, 49, 44, 0.06);
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.04);
+        }
+
+        .table-wrap {
+            overflow: auto;
+            border-radius: 22px;
+            border: 1px solid rgba(22, 49, 44, 0.06);
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 860px;
+            background: transparent;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 15px 16px;
+            border-bottom: 1px solid rgba(22, 49, 44, 0.06);
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        th {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: rgba(22, 49, 44, 0.42);
+            background: rgba(255, 255, 255, 0.45);
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 16px;
+            display: grid;
+            place-items: center;
+            color: #fff;
+            font-weight: 800;
+            font-size: 13px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-2));
+            flex-shrink: 0;
+        }
+
+        .user strong {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 3px;
+        }
+
+        .user small {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 8px 10px;
+            border-radius: 999px;
+        }
+
+        .status.active {
+            background: var(--success-soft);
+            color: var(--success);
+        }
+
+        .status.pending {
+            background: var(--accent-soft);
+            color: #8d6916;
+        }
+
+        .status.flagged {
+            background: var(--danger-soft);
+            color: var(--danger);
+        }
+
+        .status.review {
+            background: var(--purple-soft);
+            color: var(--purple);
+        }
+
+        .status.neutral {
+            background: var(--info-soft);
+            color: var(--info);
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .action-link {
+            color: var(--primary);
+            font-weight: 800;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .stack {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .sub-card {
+            border: 1px solid rgba(22, 49, 44, 0.06);
+            border-radius: 24px;
+            padding: 18px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.66));
+        }
+
+        .sub-card h4 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            margin-bottom: 6px;
+            letter-spacing: -0.03em;
+        }
+
+        .sub-card p {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.6;
+            margin-bottom: 14px;
+        }
+
+        .progress-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .bar {
+            width: 100%;
+            height: 10px;
+            border-radius: 999px;
+            background: rgba(22, 49, 44, 0.08);
+            overflow: hidden;
+        }
+
+        .bar>span {
+            display: block;
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--accent), var(--primary-2));
+        }
+
+        .list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 4px;
+        }
+
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px dashed rgba(22, 49, 44, 0.08);
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .list-item strong {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .list-item small {
+            display: block;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.45;
+        }
+
+        .calendar-list {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .event {
+            border: 1px solid rgba(22, 49, 44, 0.06);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.66));
+            border-radius: 22px;
+            padding: 16px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .event .time {
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 12px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            margin-bottom: 9px;
+        }
+
+        .event h4 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 17px;
+            margin-bottom: 6px;
+            letter-spacing: -0.03em;
+        }
+
+        .event p {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.55;
+        }
+
+        .mini-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .metric-box {
+            padding: 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(22, 49, 44, 0.06);
+            background: rgba(27, 60, 53, 0.05);
+        }
+
+        .metric-box .label {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: rgba(22, 49, 44, 0.45);
+            margin-bottom: 7px;
+        }
+
+        .metric-box .num {
+            font-family: 'Outfit', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -0.04em;
+        }
+
+        .metric-box .caption {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .empty-state {
+            padding: 26px;
+            border-radius: 28px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.68));
+            border: 1px solid rgba(22, 49, 44, 0.06);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .empty-state h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 28px;
+            letter-spacing: -0.04em;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: var(--muted);
+            line-height: 1.7;
+            font-size: 14px;
+            max-width: 720px;
+        }
+
+        .footer-note {
+            padding: 18px 20px;
+            border-radius: 24px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.66));
+            border: 1px solid rgba(22, 49, 44, 0.06);
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+            box-shadow: var(--shadow-md);
+            margin-top: 20px;
+        }
+
+        @media (max-width: 1250px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .layout-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 980px) {
+            .shell {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                height: auto;
+                max-height: none;
+                overflow: visible;
+            }
+
+            .calendar-list,
+            .mini-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .main {
+                padding: 16px;
+            }
+
+            .sidebar {
+                padding: 18px 14px;
+            }
+
+            .headline h2 {
+                font-size: 28px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search {
+                min-width: 100%;
+            }
+
+            .top-actions {
+                width: 100%;
+            }
+
+            .action-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="shell">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">🍃</div>
+                <div>
+                    <h1>CarePlate Admin</h1>
+                    <p>Clinical nutrition operations</p>
+                </div>
+            </div>
+
+            <div class="nav-group">
+                <div class="nav-title">Core</div>
+                <div class="nav-item active" data-page="overview">
+                    <div class="nav-icon">◫</div><span>Overview</span>
+                </div>
+                <div class="nav-item" data-page="users">
+                    <div class="nav-icon">👥</div><span>Users</span>
+                </div>
+                <div class="nav-item" data-page="dietitians">
+                    <div class="nav-icon">🩺</div><span>Dietitians</span>
+                </div>
+                <div class="nav-item" data-page="consultations">
+                    <div class="nav-icon">💬</div><span>Consultations</span>
+                </div>
+                <div class="nav-item" data-page="recipes">
+                    <div class="nav-icon">🍲</div><span>Recipes & Nutrition</span>
+                </div>
+            </div>
+
+            <div class="nav-group">
+                <div class="nav-title">Operations</div>
+                <div class="nav-item" data-page="subscriptions">
+                    <div class="nav-icon">💳</div><span>Subscriptions</span>
+                </div>
+                <div class="nav-item" data-page="analytics">
+                    <div class="nav-icon">📈</div><span>Analytics</span>
+                </div>
+                <div class="nav-item" data-page="notifications">
+                    <div class="nav-icon">🔔</div><span>Notifications</span>
+                </div>
+                <div class="nav-item" data-page="permissions">
+                    <div class="nav-icon">🛡</div><span>Permissions</span>
+                </div>
+                <div class="nav-item" data-page="settings">
+                    <div class="nav-icon">⚙</div><span>System Settings</span>
+                </div>
+            </div>
+
+            <div class="side-card">
+                <h3>MVP Launch Status</h3>
+                <p>
+                    Admin visibility across patient accounts, specialist verification, content governance,
+                    nutrition data quality, and consultation support.
+                </p>
+                <button class="side-btn">View Readiness Report</button>
+            </div>
+        </aside>
+
+        <main class="main">
+
+            <!-- OVERVIEW -->
+            <section class="page active" id="page-overview">
+                <div class="topbar">
+                    <div class="headline">
+                        <h2>CarePlate Admin Dashboard</h2>
+                        <p>
+                            A web-based internal control center for managing patients, verified dietitians,
+                            meal-planning content, consultations, subscriptions, and health-platform quality assurance.
+                        </p>
+                    </div>
+
+                    <div class="top-actions">
+                        <label class="search">
+                            <span>🔎</span>
+                            <input type="text" placeholder="Search users, recipes, consultations..." />
+                        </label>
+                        <button class="action-btn secondary">Export Report</button>
+                        <button class="action-btn primary">+ Add Content</button>
+                    </div>
+                </div>
+
+                <section class="hero">
+                    <div>
+                        <h3>Today’s platform health is stable, but specialist approvals and flagged meal reviews need
+                            attention.</h3>
+                        <p>
+                            This prototype reflects the CarePlate admin scope: account control, consultation monitoring,
+                            recipe governance, cultural cuisine management, analytics, subscription oversight, and
+                            launch-readiness visibility.
+                        </p>
+
+                        <div class="hero-tags">
+                            <div class="hero-tag">Patient Accounts</div>
+                            <div class="hero-tag">Dietitian Verification</div>
+                            <div class="hero-tag">Nutrition Data QA</div>
+                            <div class="hero-tag">Consultation Monitoring</div>
+                            <div class="hero-tag">Subscriptions</div>
+                        </div>
+                    </div>
+
+                    <div class="hero-panel">
+                        <div>
+                            <h4>Operational Health Score</h4>
+                            <div class="hero-score">86%</div>
+                        </div>
+
+                        <div class="mini-stat">
+                            <div>
+                                <span class="label">Live Users Today</span>
+                                <span class="value">2,481</span>
+                            </div>
+                            <div class="status active"><span class="dot"></span>Healthy</div>
+                        </div>
+
+                        <div class="mini-stat">
+                            <div>
+                                <span class="label">Pending Specialist Reviews</span>
+                                <span class="value">18</span>
+                            </div>
+                            <div class="status pending"><span class="dot"></span>Action Needed</div>
+                        </div>
+
+                        <div class="mini-stat">
+                            <div>
+                                <span class="label">Flagged Recipe Items</span>
+                                <span class="value">07</span>
+                            </div>
+                            <div class="status flagged"><span class="dot"></span>Review</div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="grid stats-grid">
+                    <div class="card stat-card">
+                        <div class="stat-top">
+                            <div>
+                                <div class="stat-title">Total Registered Patients</div>
+                                <div class="stat-value">12,480</div>
+                            </div>
+                            <div class="pill-icon soft-blue">👤</div>
+                        </div>
+                        <div class="stat-bottom">
+                            <div class="trend up">▲ +12.4% this month</div>
+                            <div class="spark">
+                                <span style="height:10px"></span><span style="height:16px"></span><span
+                                    style="height:20px"></span>
+                                <span style="height:24px"></span><span style="height:30px"></span><span
+                                    style="height:26px"></span><span style="height:36px"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card stat-card">
+                        <div class="stat-top">
+                            <div>
+                                <div class="stat-title">Verified Dietitians</div>
+                                <div class="stat-value">214</div>
+                            </div>
+                            <div class="pill-icon soft-green">🩺</div>
+                        </div>
+                        <div class="stat-bottom">
+                            <div class="trend up">▲ +8 new approvals</div>
+                            <div class="spark">
+                                <span style="height:8px"></span><span style="height:14px"></span><span
+                                    style="height:18px"></span>
+                                <span style="height:22px"></span><span style="height:18px"></span><span
+                                    style="height:26px"></span><span style="height:32px"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card stat-card">
+                        <div class="stat-top">
+                            <div>
+                                <div class="stat-title">Consultations This Week</div>
+                                <div class="stat-value">1,036</div>
+                            </div>
+                            <div class="pill-icon soft-purple">💬</div>
+                        </div>
+                        <div class="stat-bottom">
+                            <div class="trend warn">● 41 need follow-up</div>
+                            <div class="spark">
+                                <span style="height:11px"></span><span style="height:14px"></span><span
+                                    style="height:26px"></span>
+                                <span style="height:24px"></span><span style="height:29px"></span><span
+                                    style="height:30px"></span><span style="height:34px"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card stat-card">
+                        <div class="stat-top">
+                            <div>
+                                <div class="stat-title">Premium Subscribers</div>
+                                <div class="stat-value">3,972</div>
+                            </div>
+                            <div class="pill-icon soft-orange">💳</div>
+                        </div>
+                        <div class="stat-bottom">
+                            <div class="trend down">▼ 2.1% churn risk</div>
+                            <div class="spark">
+                                <span style="height:14px"></span><span style="height:18px"></span><span
+                                    style="height:16px"></span>
+                                <span style="height:24px"></span><span style="height:22px"></span><span
+                                    style="height:28px"></span><span style="height:31px"></span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="grid layout-2">
+                    <div class="card section">
+                        <div class="section-head">
+                            <div>
+                                <h3>Patient & Account Management</h3>
+                                <p>Review patient profiles, subscription states, condition flags, activity levels, and
+                                    support interventions.</p>
+                            </div>
+                            <div class="chip-row">
+                                <div class="chip">All Users</div>
+                                <div class="chip">Flagged Patients</div>
+                                <div class="chip">Premium</div>
+                            </div>
+                        </div>
+
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Condition Focus</th>
+                                        <th>Meal Plan Status</th>
+                                        <th>Subscription</th>
+                                        <th>Last Active</th>
+                                        <th>Risk</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="user">
+                                                <div class="avatar">AO</div>
+                                                <div><strong>Amina
+                                                        Okafor</strong><small>amina.okafor@careplate.app</small></div>
+                                            </div>
+                                        </td>
+                                        <td>Type 2 Diabetes</td>
+                                        <td><span class="status active"><span class="dot"></span>Approved</span></td>
+                                        <td>Premium Annual</td>
+                                        <td>12 mins ago</td>
+                                        <td><span class="status neutral"><span class="dot"></span>Low</span></td>
+                                        <td><a class="action-link">Open Profile</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="user">
+                                                <div class="avatar">RK</div>
+                                                <div><strong>Rahul Kapoor</strong><small>rahul.k@careplate.app</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>Hypertension</td>
+                                        <td><span class="status pending"><span class="dot"></span>Pending Review</span>
+                                        </td>
+                                        <td>Trial</td>
+                                        <td>1 hour ago</td>
+                                        <td><span class="status review"><span class="dot"></span>Medium</span></td>
+                                        <td><a class="action-link">Assign Dietitian</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="stack">
+                        <div class="card section sub-card">
+                            <h4>Specialist Verification Pipeline</h4>
+                            <p>Monitor credential checks for nutritionists and dietitians before platform activation.
+                            </p>
+                            <div class="progress-row">
+                                <span>Approved this cycle</span>
+                                <strong>42 / 60</strong>
+                            </div>
+                            <div class="bar"><span style="width:70%"></span></div>
+                            <div class="list">
+                                <div class="list-item">
+                                    <div><strong>Credentials pending manual review</strong><small>8 professionals
+                                            uploaded incomplete documentation.</small></div>
+                                    <span class="status pending"><span class="dot"></span>8</span>
+                                </div>
+                                <div class="list-item">
+                                    <div><strong>License validation complete</strong><small>Regional checks passed for
+                                            Nigerian and South Asian specialists.</small></div>
+                                    <span class="status active"><span class="dot"></span>31</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card section sub-card">
+                            <h4>Nutrition Data Integrity</h4>
+                            <p>Validate calorie and macro data from API sources, local food entries, and curated
+                                regional dishes.</p>
+                            <div class="list">
+                                <div class="list-item">
+                                    <div><strong>Edamam sync health</strong><small>Stable API responses, caching enabled
+                                            for repeated recipe analysis.</small></div>
+                                    <span class="status active"><span class="dot"></span>OK</span>
+                                </div>
+                                <div class="list-item">
+                                    <div><strong>Medical-rule alerts</strong><small>4 recipes exceeded diabetic sugar
+                                            thresholds in review.</small></div>
+                                    <span class="status flagged"><span class="dot"></span>4</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="footer-note">
+                    This overview keeps the original admin dashboard structure, while the theme matches the CarePlate
+                    visual style.
+                </div>
+            </section>
+
+            <!-- USERS -->
+            <section class="page" id="page-users">
+                <div class="topbar">
+                    <div class="headline">
+                        <h2>User Management</h2>
+                        <p>Manage patient accounts, track risks, review subscriptions, and resolve support issues.</p>
+                    </div>
+                    <div class="top-actions">
+                        <button class="action-btn secondary">Export Users</button>
+                        <button class="action-btn primary">+ Add User</button>
+                    </div>
+                </div>
+
+                <div class="card section">
+                    <div class="section-head">
+                        <div>
+                            <h3>All Patient Accounts</h3>
+                            <p>Search, filter, activate, suspend, and inspect user profiles across programs.</p>
+                        </div>
+                        <div class="chip-row">
+                            <div class="chip">Active</div>
+                            <div class="chip">Premium</div>
+                            <div class="chip">Flagged</div>
+                            <div class="chip">Inactive</div>
+                        </div>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Program</th>
+                                    <th>Status</th>
+                                    <th>Plan</th>
+                                    <th>Adherence</th>
+                                    <th>Support</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="user">
+                                            <div class="avatar">EO</div>
+                                            <div><strong>Ella Okoye</strong><small>ella@careplate.app</small></div>
+                                        </div>
+                                    </td>
+                                    <td>Diabetes</td>
+                                    <td><span class="status active"><span class="dot"></span>Active</span></td>
+                                    <td>Premium</td>
+                                    <td>92%</td>
+                                    <td>None</td>
+                                    <td><a class="action-link">View Account</a></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="user">
+                                            <div class="avatar">FK</div>
+                                            <div><strong>Farah Khan</strong><small>farah@careplate.app</small></div>
+                                        </div>
+                                    </td>
+                                    <td>Hypertension</td>
+                                    <td><span class="status pending"><span class="dot"></span>At Risk</span></td>
+                                    <td>Trial</td>
+                                    <td>67%</td>
+                                    <td>Needs Follow-up</td>
+                                    <td><a class="action-link">Open Case</a></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="user">
+                                            <div class="avatar">DO</div>
+                                            <div><strong>Daniel Osei</strong><small>daniel@careplate.app</small></div>
+                                        </div>
+                                    </td>
+                                    <td>Weight Management</td>
+                                    <td><span class="status flagged"><span class="dot"></span>Flagged</span></td>
+                                    <td>Free</td>
+                                    <td>44%</td>
+                                    <td>Escalated</td>
+                                    <td><a class="action-link">Investigate</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DIETITIANS -->
+            <section class="page" id="page-dietitians">
+                <div class="topbar">
+                    <div class="headline">
+                        <h2>Dietitian Management</h2>
+                        <p>Approve specialists, validate credentials, track response quality, and manage professional
+                            coverage.</p>
+                    </div>
+                    <div class="top-actions">
+                        <button class="action-btn secondary">Export Specialists</button>
+                        <button class="action-btn primary">+ Add Specialist</button>
+                    </div>
+                </div>
+
+                <section class="grid layout-2">
+                    <div class="card section">
+                        <div class="section-head">
+                            <div>
+                                <h3>Verification Queue</h3>
+                                <p>Review submitted credentials and approve qualified professionals.</p>
+                            </div>
+                        </div>
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Specialist</th>
+                                        <th>Specialty</th>
+                                        <th>Region</th>
+                                        <th>Status</th>
+                                        <th>Submitted</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="user">
+                                                <div class="avatar">SC</div>
+                                                <div><strong>Dr. Sarah Cole</strong><small>RD, CDCES</small></div>
+                                            </div>
+                                        </td>
+                                        <td>Diabetes</td>
+                                        <td>Lagos</td>
+                                        <td><span class="status active"><span class="dot"></span>Approved</span></td>
+                                        <td>2 days ago</td>
+                                        <td><a class="action-link">Review Profile</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="user">
+                                                <div class="avatar">AR</div>
+                                                <div><strong>Anita Rao</strong><small>Clinical Dietitian</small></div>
+                                            </div>
+                                        </td>
+                                        <td>Cholesterol</td>
+                                        <td>Delhi</td>
+                                        <td><span class="status pending"><span class="dot"></span>Pending</span></td>
+                                        <td>Today</td>
+                                        <td><a class="action-link">Approve</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="stack">
+                        <div class="card section sub-card">
+                            <h4>Coverage Snapshot</h4>
+                            <p>See where specialist supply is strongest and where care capacity is thin.</p>
+                            <div class="list">
+                                <div class="list-item">
+                                    <div><strong>Diabetes Specialists</strong><small>Highest provider coverage across
+                                            all programs.</small></div><span class="status active"><span
+                                            class="dot"></span>Strong</span>
+                                </div>
+                                <div class="list-item">
+                                    <div><strong>Hypertension Specialists</strong><small>Growing but still needs
+                                            expansion in some regions.</small></div><span class="status pending"><span
+                                            class="dot"></span>Medium</span>
+                                </div>
+                                <div class="list-item">
+                                    <div><strong>Pregnancy Nutrition</strong><small>Limited specialist supply across
+                                            active markets.</small></div><span class="status flagged"><span
+                                            class="dot"></span>Low</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- CONSULTATIONS -->
+            <section class="page" id="page-consultations">
+                <div class="topbar">
+                    <div class="headline">
+                        <h2>Consultations</h2>
+                        <p>Monitor live sessions, queued support, response times, and unresolved patient conversations.
+                        </p>
+                    </div>
+                    <div class="top-actions">
+                        <button class="action-btn secondary">Export Logs</button>
+                        <button class="action-btn primary">+ New Session</button>
+                    </div>
+                </div>
+
+                <section class="grid layout-2">
+                    <div class="card section">
+                        <div class="section-head">
+                            <div>
+                                <h3>Live & Upcoming Sessions</h3>
+                                <p>Operational visibility into active care delivery.</p>
+                            </div>
+                        </div>
+
+                        <div class="calendar-list">
+                            <div class="event">
+                                <div class="time">09:00 AM — Live</div>
+                                <h4>Dayo Ogunleye × Dr. Sarah Khan</h4>
+                                <p>Weight-loss adherence review and portion recalibration.</p>
+                            </div>
+                            <div class="event">
+                                <div class="time">10:30 AM — Queued</div>
+                                <h4>Priya Singh × Anita Rao</h4>
+                                <p>Cholesterol support follow-up after sodium alerts.</p>
+                            </div>
+                            <div class="event">
+                                <div class="time">12:15 PM — Review</div>
+                                <h4>Amina Okafor × Dr. Daniel Yusuf</h4>
+                                <p>Breakfast substitutions for improved glucose stability.</p>
+                            </div>
+                            <div class="event">
+                                <div class="time">02:00 PM — New Match</div>
+                                <h4>Rahul Kapoor</h4>
+                                <p>Awaiting specialist assignment based on profile fit.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card section">
+                        <div class="section-head">
+                            <div>
+                                <h3>Consult Metrics</h3>
+                                <p>Fast signals for service quality.</p>
+                            </div>
+                        </div>
+
+                        <div class="mini-grid">
+                            <div class="metric-box">
+                                <div class="label">First Response</div>
+                                <div class="num">6m</div>
+                                <div class="caption">Average first reply speed.</div>
+                            </div>
+                            <div class="metric-box">
+                                <div class="label">Resolved</div>
+                                <div class="num">94%</div>
+                                <div class="caption">Cases closed successfully.</div>
+                            </div>
+                            <div class="metric-box">
+                                <div class="label">Rating</div>
+                                <div class="num">4.8</div>
+                                <div class="caption">Average session score.</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- RECIPES -->
+            <section class="page" id="page-recipes">
+                <div class="topbar">
+                    <div class="headline">
+                        <h2>Recipes & Nutrition</h2>
+                        <p>Manage recipe quality, cuisine coverage, macro validation, and medical diet rules.</p>
+                    </div>
+                    <div class="top-actions">
+                        <button class="action-btn secondary">Export Recipes</button>
+                        <button class="action-btn primary">+ Add Recipe</button>
+                    </div>
+                </div>
+
+                <div class="card section">
+                    <div class="section-head">
+                        <div>
+                            <h3>Content Library</h3>
+                            <p>Review recipe items, regional templates, and approval status.</p>
+                        </div>
+                        <div class="chip-row">
+                            <div class="chip">Nigeria</div>
+                            <div class="chip">South Asia</div>
+                            <div class="chip">Diabetes</div>
+                            <div class="chip">Hypertension</div>
+                        </div>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Recipe</th>
+                                    <th>Region</th>
+                                    <th>Program</th>
+                                    <th>Quality</th>
+                                    <th>Macros</th>
+                                    <th>Updated</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Low-Sodium Jollof Rice Bowl</td>
+                                    <td>Nigeria</td>
+                                    <td>Hypertension</td>
+                                    <td><span class="status active"><span class="dot"></span>Verified</span></td>
+                                    <td>Good</td>
+                                    <td>2 hrs ago</td>
+                                    <td><a class="action-link">Edit</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Chapati & Lentil Curry Plan</td>
+                                    <td>South Asia</td>
+                                    <td>Diabetes</td>
+                                    <td><span class="status pending"><span class="dot"></span>Review</span></td>
+                                    <td>Recheck</td>
+                                    <td>Today</td>
+                                    <td><a class="action-link">Validate</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Pregnancy Nutrition Caution Rules</td>
+                                    <td>Global</td>
+                                    <td>Guidelines</td>
+                                    <td><span class="status review"><span class="dot"></span>Legal</span></td>
+                                    <td>—</td>
+                                    <td>Mar 16</td>
+                                    <td><a class="action-link">Open</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SUBSCRIPTIONS -->
+            <section class="page" id="page-subscriptions">
+                <div class="topbar">
+                    <div class="headline">
+                        <h2>Subscriptions</h2>
+                        <p>Track premium plans, trial conversion, churn risk, and payment-related platform performance.
+                        </p>
+                    </div>
+                </div>
+
+                <section class="grid stats-grid">
+                    <div class="card stat-card">
+                        <div class="stat-top">
+                            <div>
+                                <div class="stat-title">Monthly Revenue</div>
+                                <div class="stat-value">$28.4k</div>
+                            </div>
+                            <div class="pill-icon soft-green">💰</div>
+                        </div>
+                        <div class="stat-bottom">
+                            <div class="trend up">▲ Revenue up</div>
+                        </div>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="stat-top">
+                            <div>
+                                <div class="stat-title">Trial Conversion</div>
+                                <div class="stat-value">31%</div>
+                            </div>
+                            <div class="pill-icon soft-blue">🔄</div>
+                        </div>
+                        <div class="stat-bottom">
+                            <div class="trend up">▲ Healthy</div>
+                        </div>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="stat-top">
+                            <div>
+                                <div class="stat-title">At-Risk Users</div>
+                                <div class="stat-value">186</div>
+                            </div>
+                            <div class="pill-icon soft-orange">⚠️</div>
+                        </div>
+                        <div class="stat-bottom">
+                            <div class="trend warn">● Needs retention flow</div>
+                        </div>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="stat-top">
+                            <div>
+                                <div class="stat-title">Churn Rate</div>
+                                <div class="stat-value">2.1%</div>
+                            </div>
+                            <div class="pill-icon soft-red">📉</div>
+                        </div>
+                        <div class="stat-bottom">
+                            <div class="trend down">▼ Watch closely</div>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- ANALYTICS -->
+            <section class="page" id="page-analytics">
+                <div class="topbar">
+                    <div class="headline">
+                        <h2>Analytics</h2>
+                        <p>High-level business and care-platform metrics across adoption, retention, consultations, and
+                            content use.</p>
+                    </div>
+                </div>
+
+                <div class="card section">
+                    <div class="section-head">
+                        <div>
+                            <h3>Analytics Summary</h3>
+                            <p>Usage data tied to growth, adherence, and care quality.</p>
+                        </div>
+                    </div>
+                    <div class="mini-grid">
+                        <div class="metric-box">
+                            <div class="label">DAU</div>
+                            <div class="num">2,481</div>
+                            <div class="caption">Daily active users today.</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="label">Weekly Meals Viewed</div>
+                            <div class="num">18.2k</div>
+                            <div class="caption">Meal-plan engagement this week.</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="label">Average Adherence</div>
+                            <div class="num">81%</div>
+                            <div class="caption">Across active patient programs.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- NOTIFICATIONS -->
+            <section class="page" id="page-notifications">
+                <div class="topbar">
+                    <div class="headline">
+                        <h2>Notifications</h2>
+                        <p>Manage system alerts, patient nudges, care reminders, and admin attention items.</p>
+                    </div>
+                </div>
+
+                <div class="card section">
+                    <div class="section-head">
+                        <div>
+                            <h3>Notification Center</h3>
+                            <p>Recent alerts that need admin awareness.</p>
+                        </div>
+                    </div>
+                    <div class="list">
+                        <div class="list-item">
+                            <div><strong>4 recipes exceeded diabetic sugar thresholds</strong><small>Content moderation
+                                    queue updated 14 mins ago.</small></div><span class="status flagged"><span
+                                    class="dot"></span>High</span>
+                        </div>
+                        <div class="list-item">
+                            <div><strong>18 specialist reviews pending</strong><small>Verification team should process
+                                    before tomorrow.</small></div><span class="status pending"><span
+                                    class="dot"></span>Open</span>
+                        </div>
+                        <div class="list-item">
+                            <div><strong>2 unresolved premium support threads</strong><small>Escalated for care-team
+                                    follow-up.</small></div><span class="status review"><span
+                                    class="dot"></span>Watch</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PERMISSIONS -->
+            <section class="page" id="page-permissions">
+                <div class="topbar">
+                    <div class="headline">
+                        <h2>Permissions</h2>
+                        <p>Control role access across patients, dietitians, moderators, and administrators.</p>
+                    </div>
+                </div>
+
+                <div class="card section">
+                    <div class="section-head">
+                        <div>
+                            <h3>Role Access Matrix</h3>
+                            <p>Who can see and edit what inside CarePlate.</p>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Role</th>
+                                    <th>User Data</th>
+                                    <th>Recipes</th>
+                                    <th>Consultations</th>
+                                    <th>Analytics</th>
+                                    <th>Billing</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Patient</td>
+                                    <td>Own Only</td>
+                                    <td>View</td>
+                                    <td>Own</td>
+                                    <td>No</td>
+                                    <td>Own</td>
+                                </tr>
+                                <tr>
+                                    <td>Dietitian</td>
+                                    <td>Assigned Users</td>
+                                    <td>Suggest</td>
+                                    <td>Assigned</td>
+                                    <td>Limited</td>
+                                    <td>No</td>
+                                </tr>
+                                <tr>
+                                    <td>Admin</td>
+                                    <td>All</td>
+                                    <td>Edit</td>
+                                    <td>All</td>
+                                    <td>All</td>
+                                    <td>All</td>
+                                </tr>
+                                <tr>
+                                    <td>Moderator</td>
+                                    <td>Limited</td>
+                                    <td>Edit</td>
+                                    <td>Review</td>
+                                    <td>No</td>
+                                    <td>No</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SETTINGS -->
+            <section class="page" id="page-settings">
+                <div class="topbar">
+                    <div class="headline">
+                        <h2>System Settings</h2>
+                        <p>Configure global platform behavior, integrations, moderation defaults, and operational
+                            preferences.</p>
+                    </div>
+                </div>
+
+                <div class="empty-state">
+                    <h3>Global configuration controls</h3>
+                    <p>
+                        This page is where API integrations, notification defaults, subscription behavior,
+                        moderation rules, and rollout settings would be controlled in the real product.
+                    </p>
+                </div>
+
+                <div class="grid layout-2" style="margin-top:20px;">
+                    <div class="card section sub-card">
+                        <h4>Connected Services</h4>
+                        <div class="list">
+                            <div class="list-item">
+                                <div><strong>Nutrition API</strong><small>Edamam integration active.</small></div><span
+                                    class="status active"><span class="dot"></span>Connected</span>
+                            </div>
+                            <div class="list-item">
+                                <div><strong>Payment Gateway</strong><small>Subscriptions and renewals enabled.</small>
+                                </div><span class="status active"><span class="dot"></span>Connected</span>
+                            </div>
+                            <div class="list-item">
+                                <div><strong>Chat Service</strong><small>Consultation messaging currently
+                                        healthy.</small></div><span class="status active"><span
+                                        class="dot"></span>Connected</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card section sub-card">
+                        <h4>System Toggles</h4>
+                        <div class="list">
+                            <div class="list-item">
+                                <div><strong>Auto-flag recipe anomalies</strong><small>Detect unusual nutrition values
+                                        automatically.</small></div><span class="status active"><span
+                                        class="dot"></span>On</span>
+                            </div>
+                            <div class="list-item">
+                                <div><strong>Premium escalation priority</strong><small>Push premium support threads
+                                        higher in queue.</small></div><span class="status active"><span
+                                        class="dot"></span>On</span>
+                            </div>
+                            <div class="list-item">
+                                <div><strong>Maintenance mode</strong><small>Temporarily disable patient-facing
+                                        updates.</small></div><span class="status pending"><span
+                                        class="dot"></span>Off</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        const navItems = document.querySelectorAll('.nav-item');
+        const pages = document.querySelectorAll('.page');
+
+        function showPage(pageName) {
+            navItems.forEach(item => {
+                item.classList.toggle('active', item.dataset.page === pageName);
+            });
+
+            pages.forEach(page => {
+                page.classList.toggle('active', page.id === 'page-' + pageName);
+            });
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                showPage(item.dataset.page);
+            });
+        });
+
+        document.querySelector('.side-btn')?.addEventListener('click', () => {
+            alert('Launch readiness report opened.\\n\\nThis is a front-end prototype interaction.');
+        });
+
+        document.querySelectorAll('.action-btn.primary').forEach(btn => {
+            btn.addEventListener('click', () => {
+                alert('Primary action clicked.\\n\\nIn a real product this would open a modal or creation flow.');
+            });
+        });
+
+        document.querySelectorAll('.action-btn.secondary').forEach(btn => {
+            btn.addEventListener('click', () => {
+                alert('Export action clicked.\\n\\nIn a real product this would generate a downloadable report.');
+            });
+        });
+
+        document.querySelectorAll('.action-link').forEach(link => {
+            link.addEventListener('click', () => {
+                alert('Prototype action triggered: ' + link.textContent);
+            });
+        });
+    </script>
+</body>
+
+</html>
